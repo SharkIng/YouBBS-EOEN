@@ -1,4 +1,7 @@
 <?php 
+
+require(dirname(__FILE__) . './include/GoogleAuth/GoogleAuth.php');
+
 if (!defined('IN_SAESPOT')) exit('error: 403 Access Denied'); 
 echo '
 <a name="1"></a>
@@ -119,6 +122,79 @@ echo '
     <tr>
         <td width="120" align="right"></td>
         <td width="auto" align="left"><input type="submit" value="设置登录密码" name="submit" class="textbtn" /></td>
+    </tr>
+    
+</tbody></table>
+</form>
+
+</div>';
+
+}
+
+/*
+|--------------------------------------------------------------------------
+| Add Google Autheticator 2-factor authentication on Temp
+|--------------------------------------------------------------------------
+|
+*/
+
+if($cur_user['gauthsecret']){
+
+echo '
+<a name="4"></a>
+<div class="title"><i class="fa fa-angle-double-right"></i> 关闭两次验证 </div>
+<div class="main-box">
+<p class="red">',$tip4,'</p>
+
+<form method="post" action="',$_SERVER["REQUEST_URI"],'#3">
+<input type="hidden" name="action" value="chgauth" />
+<input type="hidden" name="gsecret" value="<?=$cur_user["gauthsecret"]?>" />
+
+<table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
+    <tbody>
+    <tr>
+        <td width="120" align="right">请输入 Google Auth 码</td>
+        <td width="auto" align="left"><input type="text" class="sl" name="gauthcode" value="" /></td>
+    </tr>
+    <tr>
+        <td width="120" align="right"></td>
+        <td width="auto" align="left"><input type="submit" value="确定关闭" name="submit" class="textbtn" /></td>
+    </tr>
+    
+</tbody></table>
+</form>
+
+</div>';
+
+}else{
+
+$ga = new GoogleAuth();
+
+$secret = $ga->createSecret();
+$qrCodeUrl = $ga->createQRCode('EOEN', $secret);
+
+echo '
+<a name="4"></a>
+<div class="title"><i class="fa fa-angle-double-right"></i> 设置两次验证 </div>
+<div class="main-box">
+<p class="red">',$tip4,'</p>
+
+<form method="post" action="',$_SERVER["REQUEST_URI"],'#3">
+<input type="hidden" name="action" value="setgauth" />
+<input type="hidden" name="gsecret" value="<?=$secret?>" />
+
+<table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
+    <tbody>
+    <tr>
+        <img src="<?=$qrCodeUrl?>">
+    </tr>
+    <tr>
+        <td width="120" align="right">请输入Google Auth中显示的编码以便确认</td>
+        <td width="auto" align="left"><input type="password" class="sl" name="gauthcode" value="" /></td>
+    </tr>
+    <tr>
+        <td width="120" align="right"></td>
+        <td width="auto" align="left"><input type="submit" value="确认设置二次登录" name="submit" class="textbtn" /></td>
     </tr>
     
 </tbody></table>
