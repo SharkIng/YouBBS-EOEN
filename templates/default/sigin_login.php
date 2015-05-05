@@ -20,7 +20,12 @@ echo '</p>
 <form action="',$_SERVER["REQUEST_URI"],'" method="post">
 <input type="hidden" name="formhash" value="',$formhash,'" />
 <p><label>用户名： <input type="text" name="name" class="sl w200" value="',htmlspecialchars($name),'" /></label></p>
-<p><label>密　码： <input type="password" name="pw" class="sl w200" value="" /></label></p>';
+<p><label>密　码： <input type="password" name="pw" class="sl w200" value="" /></label></p>
+
+<p><label>Google Auth： <input type="text" name="gauth" class="sl w200" value="" /></label>如果已经开启二次验证登录，请输入！</p>
+';
+
+
 
 if($url_path == 'sigin'){
     if($regip){

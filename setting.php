@@ -192,9 +192,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $gcode = addslashes(trim($_POST['gauthcode']));
         $gsecret = addslashes(trim($_POST['gsecret']));
 
+        $ga = new GoogleAuth();
+
         if($gcode){
 
-            $checkResult = $ga->verifyCode($secret, $_POST['oneCode'], 1);    // 2 = 2*30sec clock tolerance
+            $checkResult = $ga->verifyCode($gsecret, $gcode, 1);    // 2 = 2*30sec clock tolerance
 
             if ($checkResult) {
                 if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret='$gsecret' WHERE id='$cur_uid'")){
@@ -215,9 +217,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $gcode = addslashes(trim($_POST['gauthcode']));
         $gsecret = addslashes(trim($_POST['gsecret']));
 
+        $ga = new GoogleAuth();
+
         if($gcode){
 
-            $checkResult = $ga->verifyCode($secret, $_POST['oneCode'], 1);    // 2 = 2*30sec clock tolerance
+            $checkResult = $ga->verifyCode($gsecret, $gcode, 1);
 
             if ($checkResult) {
                 if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret=Null WHERE id='$cur_uid'")){

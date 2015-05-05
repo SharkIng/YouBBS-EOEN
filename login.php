@@ -3,6 +3,7 @@ define('IN_SAESPOT', 1);
 
 include(dirname(__FILE__) . '/config.php');
 include(dirname(__FILE__) . '/common.php');
+include(dirname(__FILE__) . './include/GoogleAuth/GoogleAuth.php');
 
 /*
 // 屏蔽下面几行可以通过 用户名和密码 登录
@@ -38,6 +39,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     $name = addslashes(strtolower(trim($_POST["name"])));
     $pw = addslashes(trim($_POST["pw"]));
+    $gcode = addslashes(trim($_POST["gauth"]));
+
     $seccode = intval(trim($_POST["seccode"]));
     if($name && $pw && $seccode){
         if(strlen($name)<21 && strlen($pw)<32){
@@ -52,6 +55,41 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         if($db_user){
                             $pwmd5 = md5($pw);
                             if($pwmd5 == $db_user['password']){
+                                if ($db_ucode['gauthsecret'] != Null){
+                                    $ga = new GoogleAuth();
+                                    $checkResult = $ga->verifyCode($db_user['gauthsecret'], $code, 1);    // 2 = 2*30sec clock tolerance
+
+                                    if ($checkResult) {
+                                        //设置cookie
+                                        $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
+                                        $cur_uid = $db_user['id'];
+                                        
+                                        setcookie("cur_uid", $cur_uid, time()+ 86400 * 365, '/');
+                                        setcookie("cur_uname", $name, time()+86400 * 365, '/');
+                                        setcookie("cur_ucode", $db_ucode, time()+86400 * 365, '/');
+                                        $cur_user = $db_user;
+                                        unset($db_user);
+                                        
+                                        header('location: /');
+                                        exit('logined');
+                                    } else {
+                                        $errors[] = '二次验证不正确！';
+                                    }
+                                }else{
+                                    //设置cookie
+                                    $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
+                                    $cur_uid = $db_user['id'];
+                                    
+                                    setcookie("cur_uid", $cur_uid, time()+ 86400 * 365, '/');
+                                    setcookie("cur_uname", $name, time()+86400 * 365, '/');
+                                    setcookie("cur_ucode", $db_ucode, time()+86400 * 365, '/');
+                                    $cur_user = $db_user;
+                                    unset($db_user);
+                                    
+                                    header('location: /');
+                                    exit('logined');
+                                }
+
                                 //设置cookie
                                 $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
                                 $cur_uid = $db_user['id'];
@@ -68,6 +106,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 // 用户名和密码不匹配
                                 $errors[] = '输入的用户名或密码不正确！';
                             }
+
                         }else{
                             // 没有该用户名
                             $errors[] = '输入的用户名不正确！';
