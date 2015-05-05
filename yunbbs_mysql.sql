@@ -125,6 +125,7 @@ CREATE TABLE yunbbs_users (
   lastreplytime int(10) unsigned NOT NULL default '0',
   about text NOT NULL,
   notic text NOT NULL,
+  gauthsecret varchar(100) NULL default NULL,
   PRIMARY KEY  (id),
   KEY name (name)
 ) ENGINE=MyISAM ;
