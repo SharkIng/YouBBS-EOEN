@@ -199,15 +199,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $checkResult = $ga->verifyCode($gsecret, $gcode, 1);    // 2 = 2*30sec clock tolerance
 
             if ($checkResult) {
-                if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret='$gsecret' WHERE id='$cur_uid'")){
+                if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret=Null WHERE id='$cur_uid'")){
                     //更新缓存和cookie
                     $cur_user['gauthsecret'] = $gsecret;
-                    $tip3 = '成功设置Google Auth二次验证！';
+                    $tip4 = '成功取消Google Auth二次验证！';
                 }else{
-                    $tip3 = '数据保存失败，请稍后再试！';
+                    $tip4 = '数据保存失败，请稍后再试！';
                 }
             } else {
-                $tip3 = '您的Google Auth验证失败，请联系管理员！';
+                $tip4 = '您的Google Auth验证失败，请联系管理员！';
             }
         }else{
             $tip4 = '请输入Google Auth验证码！';
@@ -224,15 +224,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $checkResult = $ga->verifyCode($gsecret, $gcode, 1);
 
             if ($checkResult) {
-                if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret=Null WHERE id='$cur_uid'")){
+                if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret='$gsecret' WHERE id='$cur_uid'")){
                     //更新缓存和cookie
                     $cur_user['gauthsecret'] = null;
-                    $tip3 = '成功取消Google Auth二次验证！';
+                    $tip4 = '成功设置Google Auth二次验证！';
                 }else{
-                    $tip3 = '数据保存失败，请稍后再试！';
+                    $tip4 = '数据保存失败，请稍后再试！';
                 }
             } else {
-                $tip3 = '您的Google Auth验证失败，请联系管理员！';
+                $tip4 = '您的Google Auth验证失败，请联系管理员！';
             }
         }else{
             $tip4 = '请输入Google Auth验证码！';

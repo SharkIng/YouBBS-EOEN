@@ -157,10 +157,11 @@ class GoogleAuth
      */
 	public function createQRCode ($name, $secret)
 	{
-		$urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'');
-
-		return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.$urlencoded.'';
-	}
+		//$urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'');
+		//return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.$urlencoded.'';
+	   
+       return 'otpauth://totp/'.$name.'?secret='.$secret.'';
+    }
 
 	/**
 	 * Ceate new secret. 16 random characters from base32 table

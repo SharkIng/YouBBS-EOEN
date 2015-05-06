@@ -138,7 +138,7 @@ echo '
 |
 */
 
-if($cur_user['gauthsecret']){
+if($cur_user['gauthsecret'] != Null){
 
 echo '
 <a name="4"></a>
@@ -146,9 +146,9 @@ echo '
 <div class="main-box">
 <p class="red">',$tip4,'</p>
 
-<form method="post" action="',$_SERVER["REQUEST_URI"],'#3">
+<form method="post" action="',$_SERVER["REQUEST_URI"],'#4">
 <input type="hidden" name="action" value="chgauth" />
-<input type="hidden" name="gsecret" value="<?=$cur_user["gauthsecret"]?>" />
+<input type="hidden" name="gsecret" value="',$cur_user["gauthsecret"],'" />
 
 <table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
     <tbody>
@@ -179,9 +179,9 @@ echo '
 <div class="main-box">
 <p class="red">',$tip4,'</p>
 
-<form method="post" action="',$_SERVER["REQUEST_URI"],'#3">
+<form method="post" action="',$_SERVER["REQUEST_URI"],'#4">
 <input type="hidden" name="action" value="setgauth" />
-<input type="hidden" name="gsecret" value="<?=$secret?>" />
+<input type="hidden" name="gsecret" value="',$secret,'" />
 
 <table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
     <tbody>
@@ -198,8 +198,17 @@ echo '
     </tr>
     
 </tbody></table>
+
+<div id="output"></div>
 </form>
 
+<script src="/static/js/jquery.qrcode.min.js" type="text/javascript"></script>
+
+<script>
+    jQuery(function(){
+        jQuery(\'#output\').qrcode({width: 110,height: 110,text: "',$qrCodeUrl,'"});
+    })
+</script>
 </div>';
 
 }

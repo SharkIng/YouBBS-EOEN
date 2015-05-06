@@ -39,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     $name = addslashes(strtolower(trim($_POST["name"])));
     $pw = addslashes(trim($_POST["pw"]));
-    $gcode = addslashes(trim($_POST["gauth"]));
+    $gcode = $_POST["gauth"];
 
     $seccode = intval(trim($_POST["seccode"]));
     if($name && $pw && $seccode){
@@ -55,26 +55,36 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         if($db_user){
                             $pwmd5 = md5($pw);
                             if($pwmd5 == $db_user['password']){
-                                if ($db_ucode['gauthsecret'] != Null){
-                                    $ga = new GoogleAuth();
-                                    $checkResult = $ga->verifyCode($db_user['gauthsecret'], $code, 1);    // 2 = 2*30sec clock tolerance
+                                
+                                // G Auth Checking
+                                
+                                $gsecret = $db_user['gauthsecret'];
 
-                                    if ($checkResult) {
-                                        //设置cookie
-                                        $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
-                                        $cur_uid = $db_user['id'];
-                                        
-                                        setcookie("cur_uid", $cur_uid, time()+ 86400 * 365, '/');
-                                        setcookie("cur_uname", $name, time()+86400 * 365, '/');
-                                        setcookie("cur_ucode", $db_ucode, time()+86400 * 365, '/');
-                                        $cur_user = $db_user;
-                                        unset($db_user);
-                                        
-                                        header('location: /');
-                                        exit('logined');
-                                    } else {
-                                        $errors[] = '二次验证不正确！';
+                                if ($gsecret != Null){
+                                    if ($gcode){
+                                        $ga = new GoogleAuth();
+                                        $checkResult = $ga->verifyCode($gsecret, $gcode, 1);
+
+                                        if ($checkResult) {
+                                            //设置cookie
+                                            $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
+                                            $cur_uid = $db_user['id'];
+                                            
+                                            setcookie("cur_uid", $cur_uid, time()+ 86400 * 365, '/');
+                                            setcookie("cur_uname", $name, time()+86400 * 365, '/');
+                                            setcookie("cur_ucode", $db_ucode, time()+86400 * 365, '/');
+                                            $cur_user = $db_user;
+                                            unset($db_user);
+                                            
+                                            header('location: /');
+                                            exit('logined');
+                                        } else {
+                                            $errors[] = '您已开启二次验证，二次验证码不正确!';
+                                        }
+                                    }else{
+                                        $errors[] = '您已开启二次验证，请输入二次验证码!';
                                     }
+
                                 }else{
                                     //设置cookie
                                     $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
@@ -90,26 +100,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                     exit('logined');
                                 }
 
-                                //设置cookie
-                                $db_ucode = md5($db_user['id'].$db_user['password'].$db_user['regtime'].$db_user['lastposttime'].$db_user['lastreplytime']);
-                                $cur_uid = $db_user['id'];
-                                
-                                setcookie("cur_uid", $cur_uid, time()+ 86400 * 365, '/');
-                                setcookie("cur_uname", $name, time()+86400 * 365, '/');
-                                setcookie("cur_ucode", $db_ucode, time()+86400 * 365, '/');
-                                $cur_user = $db_user;
-                                unset($db_user);
-                                
-                                header('location: /');
-                                exit('logined');
                             }else{
                                 // 用户名和密码不匹配
-                                $errors[] = '输入的用户名或密码不正确！';
+                                $errors[] = '输入的用户名或密码不正确!';
                             }
 
                         }else{
                             // 没有该用户名
-                            $errors[] = '输入的用户名不正确！';
+                            $errors[] = '输入的用户名不正确!';
                         }
                     }else{
                         $errors[] = '输入的验证码不正确！';

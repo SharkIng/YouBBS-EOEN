@@ -21,8 +21,6 @@ echo '</p>
 <input type="hidden" name="formhash" value="',$formhash,'" />
 <p><label>用户名： <input type="text" name="name" class="sl w200" value="',htmlspecialchars($name),'" /></label></p>
 <p><label>密　码： <input type="password" name="pw" class="sl w200" value="" /></label></p>
-
-<p><label>Google Auth： <input type="text" name="gauth" class="sl w200" value="" /></label>如果已经开启二次验证登录，请输入！</p>
 ';
 
 
@@ -35,7 +33,9 @@ if($url_path == 'sigin'){
         echo '<p><label>验证码： <input type="text" name="seccode" class="sl w100" value="" /></label> <img src="/seccode.php" align="absmiddle" /></p>';
     }
 }else{
-    echo '<p><label>验证码： <input type="text" name="seccode" class="sl w100" value="" /></label> <img src="/seccode.php" align="absmiddle" /></p>';
+    echo '
+    <p><label>Google Auth： <input type="text" name="gauth" class="sl w200" value="" /></label> 如果已经开启二次验证登录，请输入！</p>
+    <p><label>验证码： <input type="text" name="seccode" class="sl w100" value="" /></label> <img src="/seccode.php" align="absmiddle" /></p>';
 }
 
 echo '<p><input type="submit" value=" 登 录 " name="submit" id="txtinbut" class="textbtn" /> </p>';
