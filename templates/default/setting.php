@@ -1,7 +1,5 @@
 <?php 
 
-require(dirname(__FILE__) . './include/GoogleAuth/GoogleAuth.php');
-
 if (!defined('IN_SAESPOT')) exit('error: 403 Access Denied'); 
 echo '
 <a name="1"></a>
@@ -183,11 +181,8 @@ echo '
 <input type="hidden" name="action" value="setgauth" />
 <input type="hidden" name="gsecret" value="',$secret,'" />
 
-<table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
+<table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12" height="120px">
     <tbody>
-    <tr>
-        <img src="<?=$qrCodeUrl?>">
-    </tr>
     <tr>
         <td width="120" align="right">请输入Google Auth中显示的编码以便确认</td>
         <td width="auto" align="left"><input type="password" class="sl" name="gauthcode" value="" /></td>

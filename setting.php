@@ -3,7 +3,7 @@ define('IN_SAESPOT', 1);
 
 require(dirname(__FILE__) . '/config.php');
 require(dirname(__FILE__) . '/common.php');
-require(dirname(__FILE__) . './include/GoogleAuth/GoogleAuth.php');
+require(dirname(__FILE__) . '/include/GoogleAuth/GoogleAuth.php');
 
 if (!$cur_user) exit('error: 401 login please');
 if ($cur_user['flag']==0){
@@ -17,6 +17,7 @@ if ($cur_user['flag']==0){
 $tip1 = '';
 $tip2 = '';
 $tip3 = '';
+$tip4 = '';
 $av_time = '';
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
