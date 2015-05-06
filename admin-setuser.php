@@ -161,6 +161,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }else{
             $tip4 = '数值不正确，请填写0~99之间的数字';
         }
+    }else if($action == 'rmgauth'){
+        if($DBS->unbuffered_query("UPDATE yunbbs_users SET gauthsecret=Null WHERE id='$mid'")){
+            //更新缓存和cookie
+            $tip5 = '成功取消Google Auth二次验证！';
+        }else{
+            $tip5 = '数据保存失败，请稍后再试！';
+        }
     }
     
 }

@@ -112,5 +112,23 @@ echo '
 </tbody></table>
 </form>
 
+</div>
+
+<a name="5"></a>
+<div class="title">为<span class="red">',$m_obj['name'],'</span>取消二次验证</div>
+<div class="main-box">
+<p class="red">',$tip5,'</p>
+<form method="post" action="',$_SERVER["REQUEST_URI"],'#5">
+<input type="hidden" name="action" value="rmgauth" />
+<table cellpadding="5" cellspacing="8" border="0" width="100%" class="fs12">
+    <tbody>
+    <tr>
+        <td width="120" align="right"></td>
+        <td width="auto" align="left"><input type="submit" value="取消二次验证" name="submit" class="textbtn" /></td>
+    </tr>
+    
+</tbody></table>
+</form>
+
 </div>';
 ?>
