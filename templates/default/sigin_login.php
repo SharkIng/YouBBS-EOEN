@@ -34,7 +34,7 @@ if($url_path == 'sigin'){
     }
 }else{
     echo '
-    <p><label>Google Auth： <input type="text" name="gauth" class="sl w200" value="" /></label> 如果已经开启二次验证登录，请输入！</p>
+    <p><label>安全码： <input type="text" name="gauth" class="sl w200" value="" /></label> 如果已经开启二次验证登录，请输入！</p>
     <p><label>验证码： <input type="text" name="seccode" class="sl w100" value="" /></label> <img src="/seccode.php" align="absmiddle" /></p>';
 }
 

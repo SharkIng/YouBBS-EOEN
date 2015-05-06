@@ -3,7 +3,7 @@ define('IN_SAESPOT', 1);
 
 include(dirname(__FILE__) . '/config.php');
 include(dirname(__FILE__) . '/common.php');
-include(dirname(__FILE__) . './include/GoogleAuth/GoogleAuth.php');
+require_once(dirname(__FILE__) . '/include/GoogleAuth/GoogleAuth.php');
 
 /*
 // 屏蔽下面几行可以通过 用户名和密码 登录
@@ -62,8 +62,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                                 if ($gsecret != Null){
                                     if ($gcode){
+
                                         $ga = new GoogleAuth();
-                                        $checkResult = $ga->verifyCode($gsecret, $gcode, 1);
+                                        $checkResult = $ga->verifyCode($gsecret, $gcode);
 
                                         if ($checkResult) {
                                             //设置cookie
@@ -81,6 +82,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                                         } else {
                                             $errors[] = '您已开启二次验证，二次验证码不正确!';
                                         }
+                                        
                                     }else{
                                         $errors[] = '您已开启二次验证，请输入二次验证码!';
                                     }
